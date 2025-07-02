@@ -36,6 +36,8 @@
         
         .status-confirmado {
             border-left: 4px solid #28a745;
+            width: 120%;
+            margin-left: -10%;
         }
         
         .status-cancelado {
@@ -66,11 +68,11 @@
             <i class="bi bi-plus"></i>
     </button>
         <!-- Filtros -->
-        <div class="row mb-4">
-            <div class="col-md-4">
+        <div class="row">
+            <div class="col-6">
                 <input type="date" class="form-control" id="filtro-data">
             </div>
-            <div class="col-md-4">
+            <div class="col-6">
                 <select class="form-select" id="filtro-status">
                     <option value="">Todos os status</option>
                     <option value="pendente">Pendente</option>
@@ -78,13 +80,16 @@
                     <option value="cancelado">Cancelado</option>
                 </select>
             </div>
-            <div class="col-md-4">
+            
+        </div>
+        <div class="row">
+            <div class="col">
                 <input type="text" class="form-control" placeholder="Pesquisar cliente...">
             </div>
         </div>
         
         <!-- Lista de Agendamentos (dados fictícios) -->
-        <div class="row" id="lista-agendamentos">
+        <div class="container-fluid" id="lista-agendamentos">
             <!-- Os agendamentos serão carregados aqui -->
         </div>
         
