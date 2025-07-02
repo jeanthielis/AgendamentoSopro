@@ -1,0 +1,184 @@
+<html>
+
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .btn-add-agendamento {
+            position: fixed;
+            bottom: 150px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            z-index: 999;
+            border-radius: 50%;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .agendamento-card {
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        
+        .agendamento-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .status-pendente {
+            border-left: 4px solid #ffc107;
+        }
+        
+        .status-confirmado {
+            border-left: 4px solid #28a745;
+        }
+        
+        .status-cancelado {
+            border-left: 4px solid #dc3545;
+        }
+        
+       
+        
+        .servico-badge {
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+    </style>
+<br>
+     <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="card-title">Agenda</h1>
+            </div>
+                <i class="bi bi-calendar-week"  style="font-size: 2rem;"></i>
+        
+    </div>
+    
+    <hr>
+
+</head>
+<body>  
+    <button class="btn btn-primary btn-add-agendamento" id="btnAgendaModal">
+            <i class="bi bi-plus"></i>
+    </button>
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <input type="date" class="form-control" id="filtro-data">
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" id="filtro-status">
+                    <option value="">Todos os status</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="confirmado">Confirmado</option>
+                    <option value="cancelado">Cancelado</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Pesquisar cliente...">
+            </div>
+        </div>
+        
+        <!-- Lista de Agendamentos (dados fictícios) -->
+        <div class="row" id="lista-agendamentos">
+            <!-- Os agendamentos serão carregados aqui -->
+        </div>
+        
+        
+    </div>
+    
+    <!-- Modal de Agendamento -->
+    <div class="modal fade" id="modalAgendamento" tabindex="-1" aria-labelledby="modalAgendamentoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAgendamentoLabel">Novo Agendamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAgendamento">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="data" class="form-label">Data</label>
+                                <input type="date" class="form-control" id="data" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="hora" class="form-label">Hora</label>
+                                <input type="time" class="form-control" id="hora" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="cliente" class="form-label">Cliente</label>
+                                <input type="text" class="form-control" id="cliente" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="celular" class="form-label">Celular</label>
+                                <input type="tel" class="form-control" id="celular" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="servico" class="form-label">Serviço</label>
+                                <select class="form-select" id="servico" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Corte Masculino">Corte Masculino</option>
+                                    <option value="Corte Feminino">Corte Feminino</option>
+                                    <option value="Coloração">Coloração</option>
+                                    <option value="Hidratação">Hidratação</option>
+                                    <option value="Manicure">Manicure</option>
+                                    <option value="Pedicure">Pedicure</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="valor" class="form-label">Valor (R$)</label>
+                                <input type="number" step="0.01" class="form-control" id="valor" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="entrada" class="form-label">Entrada (R$)</label>
+                                <input type="number" step="0.01" class="form-control" id="entrada">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cores" class="form-label">Cores</label>
+                                <input type="text" class="form-control" id="cores" placeholder="Ex: Vermelho, Loiro...">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="bairro" class="form-label">Bairro</label>
+                                <input type="text" class="form-control" id="bairro">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cidade" class="form-label">Cidade</label>
+                                <input type="text" class="form-control" id="cidade">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="observacoes" class="form-label">Observações</label>
+                                <textarea class="form-control" id="observacoes" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnSalvarAgendamento">Salvar Agendamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- jQuery e Bootstrap JS -->
+    <script src="assests/js/agenda.js"></script>
+    <script src="assests/js/app.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+       
+        
+    </script>
+</body>
+</html>

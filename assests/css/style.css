@@ -1,0 +1,81 @@
+.alert-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.alert {
+  padding: 15px 25px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  max-width: 350px;
+  transform: translateX(150%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.alert.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.alert.hide {
+  transform: translateX(150%);
+  opacity: 0;
+}
+
+.alert-success {
+  background-color: #4caf50;
+}
+
+.alert-error {
+  background-color: #f44336;
+}
+
+.alert-icon {
+  margin-right: 15px;
+  font-size: 24px;
+}
+
+.alert-close {
+  margin-left: 15px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.alert-close:hover {
+  opacity: 1;
+}
+
+.alert-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 100%;
+}
+
+.alert-progress-bar {
+  height: 100%;
+  background-color: white;
+  animation: progressBar linear;
+}
+
+@keyframes progressBar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
