@@ -1,11 +1,11 @@
    $(document).ready(function() {
-            const agendaModal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
-            document.getElementById('btnAgendaModal').onclick = () => agendaModal.show();
-      
 
-            // Função para renderizar a lista de agendamentos
-            function renderizarAgendamentos() {
-                
+        const agendaModal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
+        document.getElementById('btnAgendaModal').onclick = () => agendaModal.show();
+    
+
+        // Função para renderizar a lista de agendamentos
+        function renderizarAgendamentos() {
             $.ajax({
                 url: "banco/db_listarAgendamento.php",
                 success: function (response) {
@@ -13,56 +13,178 @@
                 }
             });
         }
+         // Função para renderizar a lista de concluídos
+        function renderizarConcluidos() {
+            $.ajax({
+                url: "banco/db_listarConcluidos.php",
+                success: function (response) {
+                    $('#lista-agendamentosConcluidos').html(response);
+                }
+            });
+        }
+   // Função servicoAutocomplete
+        $(function() {
+            const itens = [
+                "Arco Desconstruído Mini",
+                "Arco Desconstruído Médio",
+                "Arco Desconstruído Mega",
+                "Mural Desconstruído",
+                "Mão de Obras",
+                "Coluna de Balões"
+            ];
+            //Buscar do banco de dados
+            /*function showResults() {
+                const term = $input.val().trim();
+                if (term.length < 2) return;
+                
+                $.get('busca_itens.php', { termo: term })
+                .done(data => {
+                    // Processa os dados retornados
+                    displayResults(data);
+                })
+                .fail(() => alert('Erro na busca'));
+            }*/
+
+            const $input = $('#servico');
+            const $list = $('#autocompleteList');
+            let activeIndex = -1;
+
+            // Mostra resultados
+            function showResults() {
+                const term = $input.val().trim().toLowerCase();
+                activeIndex = -1;
+                $list.empty().addClass('d-none');
+                
+                if (!term) return;
+                
+                const matches = itens.filter(item => 
+                    item.toLowerCase().includes(term)
+                );
+                
+                if (matches.length) {
+                    matches.forEach(item => {
+                        $('<div>')
+                            .addClass('autocomplete-item')
+                            .html(item.replace(
+                                new RegExp(term, 'gi'),
+                                '<strong>$&</strong>'
+                            ))
+                            .on('click', () => {
+                                $input.val(item);
+                                $list.addClass('d-none');
+                            })
+                            .appendTo($list);
+                    });
+                    $list.removeClass('d-none');
+                } else {
+                    $list.html('<div class="autocomplete-item text-muted">Nenhum item encontrado</div>')
+                        .removeClass('d-none');
+                }
+            }
+
+            // Navegação por teclado
+            $input.on('keydown', function(e) {
+                const $items = $list.children();
+                if (!$items.length) return;
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex + 1) % $items.length;
+                    updateActiveItem($items, activeIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex - 1 + $items.length) % $items.length;
+                    updateActiveItem($items, activeIndex);
+                } else if (e.key === 'Enter' && activeIndex > -1) {
+                    e.preventDefault();
+                    $items.eq(activeIndex).click();
+                }
+            });
             
-            // Função para formatar data (DD/MM/YYYY)
-            function formatarData(dataString) {
-                const data = new Date(dataString);
-                return data.toLocaleDateString('pt-BR');
+            // Atualiza item ativo
+            function updateActiveItem($items, index) {
+                $items.removeClass('autocomplete-active')
+                    .eq(index).addClass('autocomplete-active')
+                    [0]?.scrollIntoView({ block: 'nearest' });
             }
             
-            // Função para retornar a classe do badge de status
-            function getStatusBadgeClass(status) {
-                return status === 'confirmado' ? 'bg-success' : 
-                       status === 'pendente' ? 'bg-warning text-dark' : 'bg-danger';
-            }            
-            
-            // Função para editar agendamento
-            window.editarAgendamento = function(id) {
-                const agendamento = agendamentos.find(a => a.id === id);
-                if (agendamento) {
-                    // Preencher o modal com os dados do agendamento
-                    $('#data').val(agendamento.data);
-                    $('#hora').val(agendamento.hora);
-                    $('#cliente').val(agendamento.cliente);
-                    $('#celular').val(agendamento.celular);
-                    $('#servico').val(agendamento.servico);
-                    $('#valor').val(agendamento.valor);
-                    $('#entrada').val(agendamento.entrada);
-                    $('#cores').val(agendamento.cores);
-                    $('#bairro').val(agendamento.bairro);
-                    $('#cidade').val(agendamento.cidade);
-                    $('#observacoes').val(agendamento.observacoes);
-                    
-                    // Alterar o título do modal
-                    $('#modalAgendamentoLabel').text('Editar Agendamento');
-                    
-                    // Abrir o modal
-                    const modal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
-                    modal.show();
+            // Fecha ao clicar fora
+            $(document).on('click', e => {
+                if (!$(e.target).closest('.autocomplete-container').length) {
+                    $list.addClass('d-none');
                 }
-            };
+            });
             
-            // Função para cancelar agendamento
-            window.cancelarAgendamento = function(id) {
-                if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
-                    const index = agendamentos.findIndex(a => a.id === id);
-                    if (index !== -1) {
-                        agendamentos[index].status = 'cancelado';
+            $input.on('input', showResults);
+        });
+
+                
+            
+    // Função para editar agendamento
+    window.editarAgendamento = function(id) {
+        const agendamento = agendamentos.find(a => a.id === id);
+        if (agendamento) {
+            // Preencher o modal com os dados do agendamento
+            $('#data').val(agendamento.data);
+            $('#hora').val(agendamento.hora);
+            $('#cliente').val(agendamento.cliente);
+            $('#celular').val(agendamento.celular);
+            $('#servico').val(agendamento.servico);
+            $('#valor').val(agendamento.valor);
+            $('#entrada').val(agendamento.entrada);
+            $('#cores').val(agendamento.cores);
+            $('#bairro').val(agendamento.bairro);
+            $('#cidade').val(agendamento.cidade);
+            $('#observacoes').val(agendamento.observacoes);
+            
+            // Alterar o título do modal
+            $('#modalAgendamentoLabel').text('Editar Agendamento');
+            
+            // Abrir o modal
+            const modal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
+            modal.show();
+        }
+    };
+            
+    // Função para cancelar agendamento
+     $(document).on('click','.deletarAgenda', function() {
+        var id = this.id;
+        if (confirm('Você tem certeza que deseja deletar este agendamento?')) {
+            $.ajax({
+                url: 'banco/db_deletarAgendamento.php',
+                type: 'POST',
+                data: { id: id },
+                success: function(response) {
+                        showAlert('Agendamento deletado com sucesso!', 'success');
                         renderizarAgendamentos();
-                    }
+                        renderizarConcluidos();
+                   
+                },
+                error: function() {
+                    showAlert('Erro ao conectar com o servidor. Tente novamente.', 'danger');
                 }
-            };
-            
+            });
+        }
+    });
+    //Marca agendamento como concluído
+    $(document).on('click','.marcarConcluido', function() {
+        var id = this.id;
+        if (confirm('Você tem certeza que deseja marcar este agendamento como concluído?')) {
+            $.ajax({
+                url: 'banco/db_marcarConcluido.php',
+                type: 'POST',
+                data: { id: id },
+                success: function(response) {
+                    showAlert('Agendamento marcado como concluído!', 'success');
+                    renderizarAgendamentos();
+                },                                   
+ 
+                error: function() {
+                    showAlert('Erro ao conectar com o servidor. Tente novamente.', 'danger');
+                }
+            });
+        }   
+    })                        
 
     // Botão para salvar agendamento        
     $(document).on('click','#btnSalvarAgendamento',function(){
@@ -92,6 +214,8 @@
                 showAlert('Cadastro realizado com sucesso!', 'success');
                 $("#btnSalvarAgendamento").prop('disabled', false);
                 $("#btnSalvarAgendamento").text('Salvar Agendamento');
+                renderizarAgendamentos();
+
 
 
             },
@@ -111,7 +235,8 @@
                 $('#formAgendamento')[0].reset();
                 $('#modalAgendamentoLabel').text('Novo Agendamento');
             });
-            
-            // Inicializar a lista de agendamentos
-            renderizarAgendamentos();
-        });
+    
+    // Inicializar a lista de agendamentos
+    renderizarAgendamentos();
+    renderizarConcluidos();
+});
