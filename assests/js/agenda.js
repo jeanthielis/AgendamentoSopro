@@ -2,26 +2,75 @@
 
         const agendaModal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
         document.getElementById('btnAgendaModal').onclick = () => agendaModal.show();
-    
+        const detalhesModal = new bootstrap.Modal('#detalhesModal');
+
+
+    $(document).on('click', '.btnDetalhesModal', function() {
+        const id = $(this).attr('id');
+        $.ajax({
+            url: 'banco/db_exibirDetalhes.php',
+            type: 'POST',
+            data: { id: id },
+            success: function(response) {
+                $('#modalBodyDetalhes').html(response);
+                detalhesModal.show();
+            },
+            error: function() {
+                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+            }
+        });
+    });
+    $(document).on('click','.btn-pesquisar',function(){
+        $("#filtro-pesquisar").fadeToggle();
+
+    })
+
+        // Função para exibir lista de Concluidos ou Pendentes
+        $(document).on('change', '#filtroSituacao', function() {
+            const situacao = $(this).val();
+            $.ajax({
+                url: 'banco/db_listarAgendamento.php',
+                type: 'POST',
+                data: { situacao: situacao },
+                success: function(response) {
+                    $('#lista-agendamentos').html(response);
+                    
+                },
+                error: function() {
+                    showAlert('Erro ao carregar agendamentos.', 'danger');
+                }   
+            })              
+        });
+
+        // Função buscar por nome
+        $(document).on('keyup', '#pesquisarNome', function() {
+            const nome = $(this).val();
+            $.ajax({
+                url: 'banco/db_listarAgendamento.php',
+                type: 'POST',
+                data: { cliente: nome, situacao:" " },
+                success: function(response) {
+                    $('#lista-agendamentos').html(response);
+                },
+                error: function() {
+                    showAlert('Erro ao buscar agendamentos.', 'danger');
+                }
+            });
+        });
 
         // Função para renderizar a lista de agendamentos
         function renderizarAgendamentos() {
+            const situacao = $('#situacao').val() ||0;
             $.ajax({
                 url: "banco/db_listarAgendamento.php",
+                data:{situacao:situacao},
+                type: 'POST',
                 success: function (response) {
                     $('#lista-agendamentos').html(response);
                 }
             });
         }
-         // Função para renderizar a lista de concluídos
-        function renderizarConcluidos() {
-            $.ajax({
-                url: "banco/db_listarConcluidos.php",
-                success: function (response) {
-                    $('#lista-agendamentosConcluidos').html(response);
-                }
-            });
-        }
+      
    // Função servicoAutocomplete
         $(function() {
             const itens = [
@@ -149,7 +198,7 @@
     // Função para cancelar agendamento
      $(document).on('click','.deletarAgenda', function() {
         var id = this.id;
-        if (confirm('Você tem certeza que deseja deletar este agendamento?')) {
+        if (confirm('Você tem certeza que deseja cancelar este agendamento?')) {
             $.ajax({
                 url: 'banco/db_deletarAgendamento.php',
                 type: 'POST',
@@ -238,5 +287,4 @@
     
     // Inicializar a lista de agendamentos
     renderizarAgendamentos();
-    renderizarConcluidos();
 });

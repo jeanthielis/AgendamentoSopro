@@ -12,6 +12,18 @@
             font-size: 24px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+
+        .btn-pesquisar {
+            position: fixed;
+            bottom: 300px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            z-index: 999;
+            border-radius: 50%;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
         
         .agendamento-card {
             transition: all 0.3s ease;
@@ -30,6 +42,12 @@
             border-left: 4px solid #ffc107;
            
 
+        }
+          
+        .status-confirmado {
+            border-left: 4px solid #28a745;
+            
+            
         }
       
 
@@ -92,32 +110,42 @@
     <button class="btn btn-primary btn-add-agendamento" id="btnAgendaModal">
             <i class="bi bi-plus"></i>
     </button>
-        <!-- Filtros -->
+
+     <button class="btn btn-secondary btn-pesquisar" >
+        <i class="bi bi-search"></i>
+    </button>
+    <div id="filtro-pesquisar" style="display:none" class="row bg-white p-3 ">
+       
         <div class="row">
             <div class="col-6">
+                <strong for="filtro-data">Data</strong>
                 <input type="date" class="form-control" id="filtro-data">
             </div>
+            
             <div class="col-6">
-                <select class="form-select" id="filtro-status">
-                    <option value="">Todos os status</option>
-                    <option value="pendente">Pendente</option>
-                    <option value="confirmado">Confirmado</option>
-                    <option value="cancelado">Cancelado</option>
+                <strong for="filtro-data">Situacao</strong>
+                <select class="form-select" id="filtroSituacao">
+                    <option value="0">Pendente</option>
+                    <option value="1">Concluidos</option>
                 </select>
             </div>
             
+        
         </div>
-
+        
         <div class="row">
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Pesquisar cliente...">
+            <div class="col-12">
+                <strong for="pesquisarNome">Pesquisar Nome</strong>
+                <input id="pesquisarNome" type="text" class="form-control">
             </div>
         </div>
         
+    
+
         </div>
         <br>
 
-        <div class="row">
+        <div class="row bg-white p-3">
             <!--Lista de Agendamento-->
             <div id="lista-agendamentos"></div>
         </div>
@@ -197,6 +225,25 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" id="btnSalvarAgendamento">Salvar Agendamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Detalhes -->
+    <div class="modal fade" id="detalhesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Detalhes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" >
+                     <div id="modalBodyDetalhes"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="btnEditar">Editar Item</button>
                 </div>
             </div>
         </div>

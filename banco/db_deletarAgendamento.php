@@ -1,6 +1,5 @@
 <?php
 include_once('db_connect.php');
-
  $id = intval($_POST['id']);
 
 
