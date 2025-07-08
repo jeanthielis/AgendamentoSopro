@@ -48,7 +48,7 @@
             $.ajax({
                 url: 'banco/db_listarAgendamento.php',
                 type: 'POST',
-                data: { cliente: nome, situacao:" " },
+                data: { cliente: nome, action:true },
                 success: function(response) {
                     $('#lista-agendamentos').html(response);
                 },
@@ -200,9 +200,9 @@
         var id = this.id;
         if (confirm('Você tem certeza que deseja cancelar este agendamento?')) {
             $.ajax({
-                url: 'banco/db_deletarAgendamento.php',
+                url: 'banco/db_marcarConcluido.php',
                 type: 'POST',
-                data: { id: id },
+                data: { id: id , situacao: 3 }, // 3 para cancelado
                 success: function(response) {
                         showAlert('Agendamento deletado com sucesso!', 'success');
                         renderizarAgendamentos();
@@ -218,11 +218,12 @@
     //Marca agendamento como concluído
     $(document).on('click','.marcarConcluido', function() {
         var id = this.id;
+        
         if (confirm('Você tem certeza que deseja marcar este agendamento como concluído?')) {
             $.ajax({
                 url: 'banco/db_marcarConcluido.php',
                 type: 'POST',
-                data: { id: id },
+                data: { id: id, situacao: 1 },
                 success: function(response) {
                     showAlert('Agendamento marcado como concluído!', 'success');
                     renderizarAgendamentos();
