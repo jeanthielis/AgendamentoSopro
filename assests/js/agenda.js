@@ -1,16 +1,16 @@
    $(document).ready(function() {
 
-        const agendaModal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
+        const agendaModal = new bootstrap.Modal('#modalAgendamento');
         document.getElementById('btnAgendaModal').onclick = () => agendaModal.show();
         const detalhesModal = new bootstrap.Modal('#detalhesModal');
 
-
+// Exibir detalhes do agendamento
     $(document).on('click', '.btnDetalhesModal', function() {
         const id = $(this).attr('id');
         $.ajax({
             url: 'banco/db_exibirDetalhes.php',
             type: 'POST',
-            data: { id: id },
+            data: { id: id , action: 0 },
             success: function(response) {
                 $('#modalBodyDetalhes').html(response);
                 detalhesModal.show();
@@ -20,6 +20,8 @@
             }
         });
     });
+
+    // Abir filtro de pesquisa
     $(document).on('click','.btn-pesquisar',function(){
         $("#filtro-pesquisar").fadeToggle();
 
@@ -170,30 +172,24 @@
                 
             
     // Função para editar agendamento
-    window.editarAgendamento = function(id) {
-        const agendamento = agendamentos.find(a => a.id === id);
-        if (agendamento) {
-            // Preencher o modal com os dados do agendamento
-            $('#data').val(agendamento.data);
-            $('#hora').val(agendamento.hora);
-            $('#cliente').val(agendamento.cliente);
-            $('#celular').val(agendamento.celular);
-            $('#servico').val(agendamento.servico);
-            $('#valor').val(agendamento.valor);
-            $('#entrada').val(agendamento.entrada);
-            $('#cores').val(agendamento.cores);
-            $('#bairro').val(agendamento.bairro);
-            $('#cidade').val(agendamento.cidade);
-            $('#observacoes').val(agendamento.observacoes);
-            
-            // Alterar o título do modal
-            $('#modalAgendamentoLabel').text('Editar Agendamento');
-            
-            // Abrir o modal
-            const modal = new bootstrap.Modal(document.getElementById('modalAgendamento'));
-            modal.show();
-        }
-    };
+  $(document).on('click', '#btnEditar', function() {
+        var id = $(".id_cliente").attr('id');
+        $.ajax({
+            url: 'banco/db_editarAgendamento.php',
+            type: 'POST',           
+            data: { id: id, action: 1 }, // 1 para editar
+            success: function(response) {
+                $('#modalBodyDetalhes').html(response);
+                $('#modalTitleDetalhes').text('Editar Agendamento');
+            },
+            error: function() {
+                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+            }
+        });
+
+
+       
+    });
             
     // Função para cancelar agendamento
      $(document).on('click','.deletarAgenda', function() {
@@ -261,7 +257,9 @@
             },
             success:function(response){
                 agendaModal.hide();
+                $('#formAgendamento')[0].reset();
                 showAlert('Cadastro realizado com sucesso!', 'success');
+                $('#modalAgendamentoLabel').text('Novo Agendamento');
                 $("#btnSalvarAgendamento").prop('disabled', false);
                 $("#btnSalvarAgendamento").text('Salvar Agendamento');
                 renderizarAgendamentos();
@@ -282,8 +280,6 @@
             
             // Quando o modal é fechado, limpar o formulário
             $('#modalAgendamento').on('hidden.bs.modal', function () {
-                $('#formAgendamento')[0].reset();
-                $('#modalAgendamentoLabel').text('Novo Agendamento');
             });
     
     // Inicializar a lista de agendamentos

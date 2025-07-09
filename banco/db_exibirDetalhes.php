@@ -2,13 +2,13 @@
 
 include_once('db_connect.php');
 
- $id = intval($_POST['id']);
-    $sql = "SELECT date_format(data,'%a') as dia, date_format(data, '%d/%m/%Y' ) as dataformatada, date_format(hora,'%H:%i') as horaformatada,id_agenda,cliente,servico,valor,restante,cores,bairro,cidade,situacao,celular FROM agenda WHERE id_agenda = $id";
-    $resultado = mysqli_query($conn, $sql);
 
-      
+$id = intval($_POST['id']);
+
+$sql = "SELECT date_format(data,'%a') as dia, date_format(data, '%d/%m/%Y' ) as dataformatada, date_format(hora,'%H:%i') as horaformatada,id_agenda,cliente,servico,valor,restante,cores,bairro,cidade,situacao,celular FROM agenda WHERE id_agenda = $id";
+$resultado = mysqli_query($conn, $sql);
+
    
-    
     while ($linha = mysqli_fetch_assoc($resultado)) {
         if ($linha['situacao'] == '0') {
             $situacao = '<span class="badge rounded-pill bg-warning text-dark">Serviço Agendado</span>';
@@ -19,7 +19,8 @@ include_once('db_connect.php');
         } else {
             $situacao = "Indefinido";
         }
-     
+        echo "<p class='id_cliente' id= '".$linha['id_agenda']."'.><strong>Id:</strong> " . $linha['id_agenda']. "</p>";
+
         echo "<p><strong>Cliente:</strong> " . $linha['cliente']. "</p>";
 
         echo "<p><strong>Data:</strong> " . $linha['dataformatada']." - ".$linha['horaformatada']."</p>";
@@ -37,6 +38,9 @@ include_once('db_connect.php');
         echo "<p><strong>Situação:</strong> " .$situacao. "</p>";
                                     
     }
+    
+
+mysqli_close($conn);
 ?>
 
 
