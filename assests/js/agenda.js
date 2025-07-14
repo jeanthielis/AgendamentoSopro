@@ -10,9 +10,11 @@
         $.ajax({
             url: 'banco/db_exibirDetalhes.php',
             type: 'POST',
-            data: { id: id , action: 0 },
+            data: { id: id },
             success: function(response) {
                 $('#modalBodyDetalhes').html(response);
+                $('#btnEditar').css('display', 'block');
+                $('#atualizarAgendamento').css('display', 'none');
                 detalhesModal.show();
             },
             error: function() {
@@ -181,6 +183,29 @@
             success: function(response) {
                 $('#modalBodyDetalhes').html(response);
                 $('#modalTitleDetalhes').text('Editar Agendamento');
+                $('#btnEditar').css('display', 'none');
+                $('#atualizarAgendamento').css('display', 'block');
+
+
+            },
+            error: function() {
+                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+            }
+        });
+    });
+               
+    // Função para editar agendamento
+  $(document).on('click', 'atualizarAgenda', function() {
+        var id = $(".id_cliente").attr('id');
+        $.ajax({
+            url: 'banco/db_editarAgendamento.php',
+            type: 'POST',           
+            data: { id: id, action: 1 }, // 1 para editar
+            success: function(response) {
+                $('#btnEditar').css('display', 'block');
+                $('#atualizarAgendamento').css('display', 'none');
+                
+
             },
             error: function() {
                 showAlert('Erro ao carregar detalhes do agendamento.', 'danger');

@@ -11,7 +11,7 @@ $resultado = mysqli_query($conn, $sql);
    
     while ($linha = mysqli_fetch_assoc($resultado)) {
        ?>
-       <form id="formEditarAgendamento" class="row g-3">
+       <form id="formDetalhes" class="row g-3">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="data" class="form-label">Data</label>
@@ -24,7 +24,7 @@ $resultado = mysqli_query($conn, $sql);
                             
                             <div class="col-md-6">
                                 <label for="cliente" class="form-label">Cliente</label>
-                                <input value="<?php echo $linha['cliente']?>" type="text" class="form-control" id="cliente" required>
+                                <input value="<?php echo $linha['cliente']?>" type="text" class="form-control" id="cliente" name="cliente" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="celular" class="form-label">Celular</label>

@@ -1,5 +1,6 @@
 <html>
        <style>
+        
        
         .btn-add-agendamento {
             position: fixed;
@@ -101,7 +102,8 @@
             }
         }
     </style>
-     <div class="d-flex justify-content-between align-items-center">
+    <br>
+     <div class="d-flex justify-content-between align-items-center cabecalho p-3">
             <div>
                 <h1 class="card-title">Agenda</h1>
             </div>
@@ -247,11 +249,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" >
-                     <div id="modalBodyDetalhes"></div>
+                     <div id="modalBodyDetalhes"></div>   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="btnEditar">Editar Item</button>
+                    <button style="display: none;" type="button" class="btn btn-primary" id="atualizarAgenda">Atualizar Agendamento</button>
+                    <button style="display: block;" type="button" class="btn btn-primary" id="btnEditar">Editar Item</button>
                 </div>
             </div>
         </div>

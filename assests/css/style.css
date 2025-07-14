@@ -1,4 +1,14 @@
+.nav{
+  background-color: rgb(4, 0, 19);
+}
 
+ .cabecalho {
+            background-color: rgb(2, 58, 103);
+            color: #fffefe;
+            border-radius: 1rem 1rem 1rem 1rem;
+            width: 100%;
+           
+        }
 
 .alert-container {
   position: fixed;
