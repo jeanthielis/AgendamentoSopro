@@ -14,7 +14,7 @@
             success: function(response) {
                 $('#modalBodyDetalhes').html(response);
                 $('#btnEditar').css('display', 'block');
-                $('#atualizarAgendamento').css('display', 'none');
+                $('#atualizarAgenda').css('display', 'none');
                 detalhesModal.show();
             },
             error: function() {
@@ -179,12 +179,13 @@
         $.ajax({
             url: 'banco/db_editarAgendamento.php',
             type: 'POST',           
-            data: { id: id, action: 1 }, // 1 para editar
+            data: { id: id, action: 0 }, // 0 para buscar detalhes
+            dataType: 'html',
             success: function(response) {
                 $('#modalBodyDetalhes').html(response);
                 $('#modalTitleDetalhes').text('Editar Agendamento');
                 $('#btnEditar').css('display', 'none');
-                $('#atualizarAgendamento').css('display', 'block');
+                $('#atualizarAgenda').css('display', 'block');
 
 
             },
@@ -195,20 +196,52 @@
     });
                
     // Função para editar agendamento
-  $(document).on('click', 'atualizarAgenda', function() {
-        var id = $(".id_cliente").attr('id');
+  $(document).on('click', '#atualizarAgenda', function() {
+        var id = $("#id_agendaAtualizar").val();
+        var data = $("#dataAtualizar").val();
+        var hora = $("#horaAtualizar").val();
+        var cliente = $("#clienteAtualizar").val();
+        var celular = $("#celularAtualizar").val();
+        var servico = $("#servicoAtualizar").val();
+        var valor = $("#valorAtualizar").val();
+        var entrada = $("#entradaAtualizar").val();
+        var cores = $("#coresAtualizar").val();
+        var bairro = $("#bairroAtualizar").val();
+        var cidade = $("#cidadeAtualizar").val();
+        var restante = parseFloat(valor) - parseFloat(entrada);
+        var situacao = $("#situacaoAtualizar").val();
+        var dados = {
+            id: id,
+            data: data,
+            hora: hora,
+            cliente: cliente,
+            celular: celular,
+            servico: servico,
+            valor: valor,
+            entrada: entrada,
+            restante: restante,
+            cores: cores,
+            bairro: bairro,
+            cidade: cidade,
+            situacao: situacao,
+            action: 1, // 1 para editar
+        };
         $.ajax({
             url: 'banco/db_editarAgendamento.php',
             type: 'POST',           
-            data: { id: id, action: 1 }, // 1 para editar
+            data: dados, // 1 para editar
+            dataType: 'html',
             success: function(response) {
                 $('#btnEditar').css('display', 'block');
                 $('#atualizarAgendamento').css('display', 'none');
-                
-
+                 detalhesModal.hide();   
+                renderizarAgendamentos();
+                showAlert('Agenda atualizada com sucesso!', 'success');
+                $('#modalTitleDetalhes').text('Detalhes do Agendamento');
+                $('#formDetalhes')[0].reset();
             },
             error: function() {
-                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+                showAlert('Erro ao atualizar Agenda do agendamento.', 'danger');
             }
         });
 
@@ -227,7 +260,6 @@
                 success: function(response) {
                         showAlert('Agendamento deletado com sucesso!', 'success');
                         renderizarAgendamentos();
-                        renderizarConcluidos();
                    
                 },
                 error: function() {
