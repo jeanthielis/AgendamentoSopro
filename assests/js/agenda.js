@@ -4,6 +4,7 @@
         document.getElementById('btnAgendaModal').onclick = () => agendaModal.show();
         const detalhesModal = new bootstrap.Modal('#detalhesModal');
 
+
 // Exibir detalhes do agendamento
     $(document).on('click', '.btnDetalhesModal', function() {
         const id = $(this).attr('id');
@@ -175,12 +176,11 @@
             
     // Função para editar agendamento
   $(document).on('click', '#btnEditar', function() {
-        var id = $(".id_cliente").attr('id');
+        var id = $("#id_agenda").val();
         $.ajax({
             url: 'banco/db_editarAgendamento.php',
             type: 'POST',           
             data: { id: id, action: 0 }, // 0 para buscar detalhes
-            dataType: 'html',
             success: function(response) {
                 $('#modalBodyDetalhes').html(response);
                 $('#modalTitleDetalhes').text('Editar Agendamento');
@@ -335,10 +335,7 @@
     });
  
             
-            // Quando o modal é fechado, limpar o formulário
-            $('#modalAgendamento').on('hidden.bs.modal', function () {
-            });
-    
+           
     // Inicializar a lista de agendamentos
     renderizarAgendamentos();
 });

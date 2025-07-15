@@ -5,38 +5,102 @@ include_once('db_connect.php');
 
 $id = intval($_POST['id']);
 
-$sql = "SELECT date_format(data,'%a') as dia, date_format(data, '%d/%m/%Y' ) as dataformatada, date_format(hora,'%H:%i') as horaformatada,id_agenda,cliente,servico,valor,restante,cores,bairro,cidade,situacao,celular FROM agenda WHERE id_agenda = $id";
+$sql = "SELECT date_format(data,'%a') as dia, date_format(data, '%d/%m/%Y' ) as dataformatada, date_format(hora,'%H:%i') as horaformatada,id_agenda,cliente,servico,valor,restante,cores,bairro,cidade,situacao,celular,entrada FROM agenda WHERE id_agenda = $id";
 $resultado = mysqli_query($conn, $sql);
 
    
     while ($linha = mysqli_fetch_assoc($resultado)) {
-        if ($linha['situacao'] == '0') {
-            $situacao = '<span class="badge rounded-pill bg-warning text-dark">Serviço Agendado</span>';
-        } elseif ($linha['situacao'] == '1') {
-            $situacao = '<span class="badge rounded-pill bg-success">Serviço Concluído</span>';
-        } elseif ($linha['situacao'] == '3') {
-            $situacao = '<span class="badge rounded-pill bg-danger">Serviço Cancelado</span>';
-        } else {
-            $situacao = "Indefinido";
-        }
-        echo "<p class='id_cliente' id= '".$linha['id_agenda']."'.><strong>Id:</strong> " . $linha['id_agenda']. "</p>";
+    ?>
+    <div class="row">
+      
+        <div class="col-md-2">
+            <img src="assests/imagens/logoOriginal.png" alt="Logo" class="img-fluid mb-3" width="100" height="100">
+            
+        </div>
+        <div class="col-md-5">
+           <input type="hidden" id="id_agenda" value="<?php echo $linha['id_agenda']?>">
+            <label>Nome Fantasia:Sopro de Alegria Vix</label>
+            <br>
+            <label>Telefone: (27) 98107-1336</label>
+            <br>
+            <label>Email:soprodealegriavix.com</label>
 
-        echo "<p><strong>Cliente:</strong> " . $linha['cliente']. "</p>";
+        </div>
+        <div class="col-md-5">
+            <label>CNPJ:47.861.674/0001-44</label>
+            <br>
+            <label>Endereço: Rua São Pedro, 696 - Conjunto Jacaraípe - Serra - ES</label>
 
-        echo "<p><strong>Data:</strong> " . $linha['dataformatada']." - ".$linha['horaformatada']."</p>";
 
-        echo "<p><strong>Serviço:</strong> " . $linha['servico']. "</p>";
 
-        echo "<p><strong>Cor:</strong> <span style='color: " . $linha['cores'] . ";'>" . $linha['cores'] . "</span></p>";
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h4>Informações Cliente</h4>
+        <div class="col-md-6">
+            <label>Cliente: <?php echo $linha['cliente']?></label>
+            <br>
+            <label>Data do Evento: <?php echo $linha['dataformatada']?></label>
+            <br>
+            <label>Bairro: <?php echo $linha['bairro']?></label>
+            <br>
+            <label>Cores: <?php echo $linha['cores']?></label>
+    
 
-        echo "<p><strong>Valor:</strong> R$ " . number_format($linha['valor'], 2, ',', '.').' - '. "<strong>Restante:</strong> R$" . number_format($linha['restante'], 2, ',', '.'). "</p>";
+        </div>
+        <div class="col-md-6">
+            <label>Celular: <?php echo $linha['celular']?></label>
+            <br>
+            <label>Hora de Inicio: <?php echo $linha['horaformatada']?></label>
+            <br>
+            <label>Cidade: <?php echo $linha['cidade']?></label>
+            <br>
+            <label>Situação: 
+                <?php 
+                if($linha['situacao'] == 0) {
+                    echo '<span class="badge rounded-pill bg-primary text-dark">Agendado</span>';
+                } elseif($linha['situacao'] == 1) {
+                    echo "<span class='badge rounded-pill bg-success text-dark'>Concluído</span>";
+                } elseif($linha['situacao'] == 3) {
+                    echo "<span class='badge rounded-pill bg-danger text-dark'>Cancelado</span>";
+                }
+                ?>
+            </label>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h4>Serviços</h4>
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Valor (R$)</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo $linha['servico']?></td>
+                        <td>R$ <?php echo number_format($linha['valor'], 2, ',', '.')?></td>
+                    </tr>
+                </tbody>
 
-        echo "<p><strong>Bairro:</strong> " . $linha['bairro'].' - '. "<strong>Cidade:</strong> " . $linha['cidade']. "</p>";
-
-        echo "<p><strong>Celular:</strong> " . $linha['celular']. "</p>";
-
-        echo "<p><strong>Situação:</strong> " .$situacao. "</p>";
-                                    
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <strong><label class="text-primary">Total: R$ <?php echo number_format($linha['valor'], 2, ',', '.')?></label></strong>
+            <br>
+            <strong><label class="text-success" >Entrada: R$ <?php echo number_format($linha['entrada'], 2, ',', '.')?> (Pago)</label></strong>
+            <br>
+            <strong><label class="text-danger">Restante: R$ <?php echo number_format($linha['restante'], 2, ',', '.')?></label></strong>
+        </div>
+    </div>
+    <?php   
     }
     
 
