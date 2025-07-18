@@ -36,7 +36,7 @@
             $.ajax({
                 url: 'banco/db_listarAgendamento.php',
                 type: 'POST',
-                data: { situacao: situacao },
+                data: { situacao: situacao,action:0 },
                 success: function(response) {
                     $('#lista-agendamentos').html(response);
                     
@@ -47,13 +47,31 @@
             })              
         });
 
+
+        // Função para exibir data
+        $(document).on('change', '#filtro-data', function() {
+            const data = $(this).val();
+            $.ajax({
+                url: 'banco/db_listarAgendamento.php',
+                type: 'POST',
+                data: {data_evento: data,action:1 },
+                success: function(response) {
+                    $('#lista-agendamentos').html(response);
+                    
+                },
+                error: function() {
+                    showAlert('Erro ao carregar agendamentos.', 'danger');
+                }   
+            })             
+        });
+
         // Função buscar por nome
         $(document).on('keyup', '#pesquisarNome', function() {
             const nome = $(this).val();
             $.ajax({
                 url: 'banco/db_listarAgendamento.php',
                 type: 'POST',
-                data: { cliente: nome, action:true },
+                data: { cliente: nome, action:0 },
                 success: function(response) {
                     $('#lista-agendamentos').html(response);
                 },
@@ -65,10 +83,9 @@
 
         // Função para renderizar a lista de agendamentos
         function renderizarAgendamentos() {
-            const situacao = $('#situacao').val() ||0;
             $.ajax({
                 url: "banco/db_listarAgendamento.php",
-                data:{situacao:situacao},
+                data:{situacao:0, action:0},
                 type: 'POST',
                 success: function (response) {
                     $('#lista-agendamentos').html(response);
@@ -194,6 +211,11 @@
             }
         });
     });
+
+    $(document).on("click","#fechar",function(){
+        detalhesModal.hide();
+
+    })
                
     // Função para editar agendamento
   $(document).on('click', '#atualizarAgenda', function() {

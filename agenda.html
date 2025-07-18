@@ -1,5 +1,6 @@
 <html>
        <style>
+      
         
        
         .btn-add-agendamento {
@@ -103,7 +104,7 @@
         }
     </style>
     <br>
-     <div class="d-flex justify-content-between align-items-center cabecalho p-3">
+     <div class="d-flex justify-content-between align-items-center cabecalho p-3 fixed-top ">
             <div>
                 <h1 class="card-title">Agenda</h1>
             </div>
@@ -112,7 +113,8 @@
     </div>
     
     <hr>
-
+<br>
+<br>
 </head>
 <body>  
     <button class="btn btn-primary btn-add-agendamento" id="btnAgendaModal">
@@ -124,40 +126,44 @@
     </button>
     <div id="filtro-pesquisar" style="display:none" class="row bg-white p-3 ">
        
-        <div class="row">
-            <div class="col-6">
-                <strong for="filtro-data">Data</strong>
-                <input type="date" class="form-control" id="filtro-data">
+        <div class="card">
+            <div class="card-header">
+                <strong>Pesquisa</strong>
             </div>
-            
-            <div class="col-6">
-                <strong for="filtro-data">Situacao</strong>
-                <select class="form-select" id="filtroSituacao">
-                    <option value="0">Pendente</option>
-                    <option value="1">Concluidos</option>
-                    <option value="3">Cancelados</option>
+            <div class="card-body">
+                <div class="col">
+                    <strong for="filtro-data">Data</strong>
+                    <input  type="date" class="form-control" id="filtro-data">
+                </div>
+                <div class="col">
+                    <strong for="filtro-data">Situacao</strong>
+                    <select class="form-select" id="filtroSituacao">
+                        <option value="0">Selecione</option>
+                        <option value="0">Pendente</option>
+                        <option value="1">Concluidos</option>
+                        <option value="3">Cancelados</option>
 
-                </select>
-            </div>
-            
-        
-        </div>
-        
-        <div class="row">
+                    </select>
+                </div>
+                <div class="row">
             <div class="col-12">
                 <strong for="pesquisarNome">Pesquisar Nome</strong>
                 <input id="pesquisarNome" type="text" class="form-control">
             </div>
         </div>
-        
+            </div>
+        </div>
+      
     
 
         </div>
         <br>
 
-        <div class="row bg-white p-3">
+        <div class="row p-3">
             <!--Lista de Agendamento-->
-            <div id="lista-agendamentos"></div>
+            <div id="lista-agendamentos">
+                <div class="alert alert-info">Sem Agendamento</div>
+            </div>
         </div>
         <br>
         <br>
@@ -252,7 +258,7 @@
                      <div id="modalBodyDetalhes"></div>   
                 </div>
                 <div class="modal-footer">
-                    <button id="btn-gerar-pdf" type="button" class="btn btn-secondary">Gerar Pdf</button>
+                    <button id="fechar" type="button" class="btn btn-secondary">Fechar</button>
                     <button style="display: none;" type="button" class="btn btn-primary" id="atualizarAgenda">Atualizar Agendamento</button>
                     <button style="display: block;" type="button" class="btn btn-primary" id="btnEditar">Editar Item</button>
                 </div>

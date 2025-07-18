@@ -12,7 +12,7 @@
 
 .alert-container {
   position: fixed;
-  top: 20px;
+  top: 150px;
   right: 20px;
   z-index: 1000;
   display: flex;
@@ -23,7 +23,7 @@
 .alert {
   padding: 15px 25px;
   border-radius: 8px;
-  color: white;
+  color: rgb(10, 10, 10);
   font-weight: 500;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: flex;

@@ -3,17 +3,25 @@ include_once('db_connect.php');
 
 $situacao= intval($_POST['situacao']);
 $cliente = mysqli_real_escape_string($conn, $_POST['cliente']);
-$action = $_POST['action'];
+$action = intval($_POST['action']);
+$data = $_POST['data_evento'];
 
-if($action == true){
-$sql="SELECT date_format(data,'%a') as dia, date_format(data, '%d/%m/%Y' ) as dataformatada, date_format(hora,'%H:%i') as horaformatada,id_agenda,cliente,servico,valor,restante,cores,bairro,cidade,situacao,celular FROM agenda WHERE cliente LIKE '%$cliente%' ORDER BY data ASC" ;
-} else {
+if($action ==1) {
+    $sql="SELECT date_format(data,'%a') as dia, date_format(data, '%d/%m/%Y' ) as dataformatada, date_format(hora,'%H:%i') as horaformatada,id_agenda,cliente,servico,valor,restante,cores,bairro,cidade,situacao,celular FROM agenda WHERE data = '$data' ORDER BY data ASC" ;
+}
+elseif($action==0){
     $sql="SELECT date_format(data,'%a') as dia, date_format(data, '%d/%m/%Y' ) as dataformatada, date_format(hora,'%H:%i') as horaformatada,id_agenda,cliente,servico,valor,restante,cores,bairro,cidade,situacao,celular FROM agenda WHERE situacao=$situacao AND cliente LIKE '%$cliente%' ORDER BY data ASC" ;
 }
+
 
 $semana = array('Sun'=>'Dom','Mon'=>'Seg','Tue'=>'Ter','Wed'=>'Qua','Thu'=>'Qui','Fri'=>'Sex','Sat'=>'Sáb');
 
 $resultado = mysqli_query($conn,$sql);
+if ($resultado->num_rows > 0) {
+   
+} else {
+    echo "<div style='padding:10px;border-radius:1rem;color:#FFF;background-color:#FA8072;color:#800000;text-align: center;  font-weight: bold;'><i class='bi bi-exclamation-circle-fill'></i> Sem agendamento marcado</div>";
+}
 
 while($linha=mysqli_fetch_assoc($resultado)){
 
