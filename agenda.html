@@ -1,8 +1,7 @@
 <html>
        <style>
       
-        
-       
+          
         .btn-add-agendamento {
             position: fixed;
             bottom: 150px;
@@ -104,19 +103,11 @@
         }
     </style>
     <br>
-     <div class="d-flex justify-content-between align-items-center cabecalho p-3 fixed-top ">
-            <div>
-                <h1 class="card-title">Agenda</h1>
-            </div>
-                <i class="bi bi-calendar-week"  style="font-size: 2rem;"></i>
-        
-    </div>
     
-    <hr>
-<br>
-<br>
+    
 </head>
-<body>  
+<body class="p-3">
+    
     <button class="btn btn-primary btn-add-agendamento" id="btnAgendaModal">
             <i class="bi bi-plus"></i>
     </button>
@@ -145,34 +136,31 @@
 
                     </select>
                 </div>
-                <div class="row">
-            <div class="col-12">
-                <strong for="pesquisarNome">Pesquisar Nome</strong>
-                <input id="pesquisarNome" type="text" class="form-control">
+                    <div class="row">
+                        <div class="col-12">
+                            <strong for="pesquisarNome">Pesquisar Nome</strong>
+                            <input id="pesquisarNome" type="text" class="form-control">
+                        </div>
+                    </div>
             </div>
         </div>
-            </div>
-        </div>
-      
-    
-
-        </div>
-        <br>
-
-        <div class="row p-3">
-            <!--Lista de Agendamento-->
-            <div id="lista-agendamentos">
-                <div class="alert alert-info">Sem Agendamento</div>
-            </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        
-        
-        
-        
     </div>
+ 
+
+        <div class="row">
+            <!--Lista de Agendamento-->
+            <div id="lista-agendamentos"></div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+                <br>
+
+        
+        
+        
+        
     
     <!-- Modal de Agendamento -->
     <div class="modal fade" id="modalAgendamento" tabindex="-1" aria-labelledby="modalAgendamentoLabel" aria-hidden="true">
@@ -223,12 +211,19 @@
                             </div>
                             
                             <div class="col-md-6">
-                                <label for="bairro" class="form-label">Bairro</label>
+                                <label for="bairro" class="form-label">Local do Evento</label>
                                 <input type="text" class="form-control" id="bairro">
                             </div>
                             <div class="col-md-6">
                                 <label for="cidade" class="form-label">Cidade</label>
-                                <input type="text" class="form-control" id="cidade">
+                                <select id="cidade" class="form-control">
+                                    <option value="Serra">Serra</option>
+                                    <option value="Vitória">Vitória</option>
+                                    <option value="Vila Velha">Vila Velha</option>
+                                    <option value="Cariacica">Cariacia</option>
+                                    <option value="Fundão">Fundão</option>
+
+                                </select>
                             </div>
                             
                             <div class="col-12">
@@ -252,15 +247,37 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitleDetalhes">Detalhes</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" id="fechar" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="conteudo" >
+                <div class="modal-body" id="comprovante" >
                      <div id="modalBodyDetalhes"></div>   
                 </div>
                 <div class="modal-footer">
+                    <button id="btn-comprovante" type="button" class="btn btn-info">Baixar</button>
                     <button id="fechar" type="button" class="btn btn-secondary">Fechar</button>
-                    <button style="display: none;" type="button" class="btn btn-primary" id="atualizarAgenda">Atualizar Agendamento</button>
                     <button style="display: block;" type="button" class="btn btn-primary" id="btnEditar">Editar Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal para Editar -->
+    <div class="modal fade" id="atualizarAgendamento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleDetalhes">Atualizar</h5>
+                    <button type="button" class="btn-close" id="fechar" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="conteudo" >
+                     <div id="bodyAtualiza"></div>   
+                </div>
+                <div class="modal-footer">
+                            <button  id="fechar" type="button" class="btn btn-danger">Cancelar</button>
+
+
+                            <button  type="button" class="btn btn-primary" id="atualizarAgenda">Atualizar</button>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -274,5 +291,8 @@
       
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>

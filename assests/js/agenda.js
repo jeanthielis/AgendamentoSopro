@@ -1,28 +1,63 @@
    $(document).ready(function() {
-
-        const agendaModal = new bootstrap.Modal('#modalAgendamento');
-        document.getElementById('btnAgendaModal').onclick = () => agendaModal.show();
-        const detalhesModal = new bootstrap.Modal('#detalhesModal');
+        listarProximos();
 
 
-// Exibir detalhes do agendamento
-    $(document).on('click', '.btnDetalhesModal', function() {
-        const id = $(this).attr('id');
-        $.ajax({
-            url: 'banco/db_exibirDetalhes.php',
-            type: 'POST',
-            data: { id: id },
-            success: function(response) {
-                $('#modalBodyDetalhes').html(response);
-                $('#btnEditar').css('display', 'block');
-                $('#atualizarAgenda').css('display', 'none');
-                detalhesModal.show();
-            },
-            error: function() {
-                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+    const agendaModal = new bootstrap.Modal('#modalAgendamento');
+    document.getElementById('btnAgendaModal').onclick = () => agendaModal.show();
+    const detalhesModal = new bootstrap.Modal('#detalhesModal');
+    const atualizaModal = new bootstrap.Modal("#atualizarAgendamento");
+
+function downloadDivAsImage(divId, fileName) {
+    const element = document.getElementById(divId);
+
+    // Configurações do html2canvas para melhor compatibilidade mobile
+    const options = {
+        scale: 2,                   // Melhora a qualidade em dispositivos com alta resolução (ex: Retina)
+        useCORS: true,              // Permite carregar imagens de outros domínios (se necessário)
+        logging: false,             // Desativa logs para melhor desempenho
+        allowTaint: false,          // Evita problemas com imagens externas
+        scrollX: 0,                 // Garante que a captura não seja afetada pelo scroll
+        scrollY: 0,
+    };
+
+    html2canvas(element, options)
+        .then(function(canvas) {
+            // Converte o canvas para imagem (usando JPEG para reduzir tamanho)
+            const imageData = canvas.toDataURL('image/jpeg', 0.9);
+
+            // Tenta fazer o download automaticamente
+            try {
+                const link = document.createElement('a');
+                link.href = imageData;
+                link.download = fileName || 'captura.jpg';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                // Fallback: Abre a imagem em uma nova aba se o download falhar
+                window.open(imageData, '_blank');
             }
+        })
+        .catch(function(error) {
+            console.error("Erro ao capturar a div:", error);
+            alert("Não foi possível gerar a imagem. Tente novamente ou use outro navegador.");
         });
+}
+
+// Uso com jQuery (ou puro JavaScript)
+    $('#btn-comprovante').on('click touchstart', function(e) {
+        e.preventDefault(); // Evita comportamento padrão do touch
+        downloadDivAsImage('comprovante', 'comprovante_agendamento.jpg');
     });
+
+
+
+
+    
+
+
+
+
 
     // Abir filtro de pesquisa
     $(document).on('click','.btn-pesquisar',function(){
@@ -81,17 +116,27 @@
             });
         });
 
-        // Função para renderizar a lista de agendamentos
-        function renderizarAgendamentos() {
-            $.ajax({
-                url: "banco/db_listarAgendamento.php",
-                data:{situacao:0, action:0},
-                type: 'POST',
-                success: function (response) {
-                    $('#lista-agendamentos').html(response);
-                }
-            });
-        }
+// Função para renderizar a lista de agendamentos
+    function renderizarAgendamentos() {
+        $.ajax({
+            url: "banco/db_listarAgendamento.php",
+            data:{situacao:0, action:0},
+            type: 'POST',
+            success: function (response) {
+                $('#lista-agendamentos').html(response);
+            }
+        });
+    }
+     function listarProximos() {
+        $.ajax({
+            url: "banco/db_listarAgendamento.php",
+            data:{situacao:0, action:2},
+            type: 'POST',
+            success: function (response) {
+                $("#listar-proximos").html(response);
+            }
+        });
+    }
       
    // Função servicoAutocomplete
         $(function() {
@@ -188,22 +233,41 @@
             
             $input.on('input', showResults);
         });
+        
+
+
+
+// Exibir detalhes do agendamento
+    $(document).on('click', '.btnDetalhesModal', function() {
+        const id = $(this).attr('id');
+        $.ajax({
+            url: 'banco/db_exibirDetalhes.php',
+            type: 'POST',
+            data: { id: id },
+            success: function(response) {
+                $('#modalBodyDetalhes').html(response);
+                detalhesModal.show();
+            },
+            error: function() {
+                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+            }
+        });
+    });
 
                 
             
-    // Função para editar agendamento
-  $(document).on('click', '#btnEditar', function() {
+    // Função para abrir a tela de edição agendamento
+  $(document).on('click','.btnAtualizaModal','#btnEditar', function() {
         var id = $("#id_agenda").val();
+        var id = $(this).attr('id');
         $.ajax({
             url: 'banco/db_editarAgendamento.php',
             type: 'POST',           
             data: { id: id, action: 0 }, // 0 para buscar detalhes
             success: function(response) {
-                $('#modalBodyDetalhes').html(response);
-                $('#modalTitleDetalhes').text('Editar Agendamento');
-                $('#btnEditar').css('display', 'none');
-                $('#atualizarAgenda').css('display', 'block');
-
+                $("#bodyAtualiza").html(response);
+                atualizaModal.show();
+                detalhesModal.hide();
 
             },
             error: function() {
@@ -212,8 +276,28 @@
         });
     });
 
+     $(document).on('click','#btnEditar', function() {
+        var id = $("#id_agenda").val();
+        $.ajax({
+            url: 'banco/db_editarAgendamento.php',
+            type: 'POST',           
+            data: { id: id, action: 0 }, // 0 para buscar detalhes
+            success: function(response) {
+                $("#bodyAtualiza").html(response);
+                atualizaModal.show();
+                detalhesModal.hide();
+
+            },
+            error: function() {
+                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+            }
+        });
+    });
+
+
     $(document).on("click","#fechar",function(){
         detalhesModal.hide();
+        atualizaModal.hide();
 
     })
                

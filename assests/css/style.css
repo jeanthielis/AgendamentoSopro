@@ -5,7 +5,6 @@
  .cabecalho {
             background-color: rgb(2, 58, 103);
             color: #fffefe;
-            border-radius: 1rem 1rem 1rem 1rem;
             width: 100%;
            
         }
@@ -102,6 +101,30 @@
             justify-content: space-between;
             align-items: center;
         }
+         
+        .agendamento-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .status-pendente {
+            border-left: 4px solid #ffc107;
+           
+
+        }
+          
+        .status-confirmado {
+            border-left: 4px solid #28a745;
+            
+            
+        }
+
+         .status-cancelado {
+            border-left: 4px solid #f13434;
+            
+            
+        }
+      
   
 
 @keyframes progressBar {

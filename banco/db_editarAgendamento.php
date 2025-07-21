@@ -66,7 +66,7 @@ if($action == 1) {
                             </div>
                             
                             <div class="col-md-6">
-                                <label for="bairro" class="form-label">Bairro</label>
+                                <label for="bairro" class="form-label">Local do Evento</label>
                                 <input value="<?php echo $linha['bairro']?>" type="text" class="form-control" id="bairroAtualizar">
                             </div>
                             <div class="col-md-6">

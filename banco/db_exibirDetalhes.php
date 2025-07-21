@@ -10,6 +10,14 @@ $resultado = mysqli_query($conn, $sql);
 
    
     while ($linha = mysqli_fetch_assoc($resultado)) {
+        if ($linha['entrada']==0){
+            $mensagem = '<strong><label class="text-dark" >Entrada: R$ '.number_format($linha["entrada"], 2, ',', '.').'</label></strong>';
+        }else{
+            $mensagem = '<strong><label class="text-success" >Entrada: R$ '.number_format($linha["entrada"], 2, ',', '.').' (pago)</label></strong>';
+
+        }
+
+        
     ?>
     <div class="row">
       
@@ -19,17 +27,17 @@ $resultado = mysqli_query($conn, $sql);
         </div>
         <div class="col-md-5">
            <input type="hidden" id="id_agenda" value="<?php echo $linha['id_agenda']?>">
-            <label>Nome Fantasia:Sopro de Alegria Vix</label>
+            <label><strong>Nome Fantasia:</strong> Sopro de Alegria Vix</label>
             <br>
-            <label>Telefone: (27) 98107-1336</label>
+            <label><strong>Telefone:</strong> (27) 98107-1336</label>
             <br>
-            <label>Email:soprodealegriavix.com</label>
+            <label><strong>Email:</strong> soprodealegriavix.com</label>
 
         </div>
         <div class="col-md-5">
-            <label>CNPJ:47.861.674/0001-44</label>
+            <label><strong>CNPJ:</strong> 47.861.674/0001-44</label>
             <br>
-            <label>Endereço: Rua São Pedro, 696 - Conjunto Jacaraípe - Serra - ES</label>
+            <label><strong>Endereço:</strong> Rua São Pedro, 696 - Conjunto Jacaraípe - Serra - ES</label>
 
 
 
@@ -39,31 +47,31 @@ $resultado = mysqli_query($conn, $sql);
     <div class="row">
         <h4>Informações Cliente</h4>
         <div class="col-md-6">
-            <label>Cliente: <?php echo $linha['cliente']?></label>
+            <label><strong>Cliente:</strong> <?php echo $linha['cliente']?></label>
             <br>
-            <label>Data do Evento: <?php echo $linha['dataformatada']?></label>
+            <label><strong>Data do Evento:</strong> <?php echo $linha['dataformatada']?></label>
             <br>
-            <label>Bairro: <?php echo $linha['bairro']?></label>
+            <label><strong>Local do Evento:</strong> <?php echo $linha['bairro']?></label>
             <br>
-            <label>Cores: <?php echo $linha['cores']?></label>
+            <label><strong>Cores:</strong> <?php echo $linha['cores']?></label>
     
 
         </div>
         <div class="col-md-6">
-            <label>Celular: <?php echo $linha['celular']?></label>
+            <label><strong>Celular:</strong> <?php echo $linha['celular']?></label>
             <br>
-            <label>Hora de Inicio: <?php echo $linha['horaformatada']?></label>
+            <label><strong> Horario de Inicio:</strong> <?php echo $linha['horaformatada']?></label>
             <br>
-            <label>Cidade: <?php echo $linha['cidade']?></label>
+            <label><strong> Cidade: </strong><?php echo $linha['cidade']?></label>
             <br>
-            <label>Situação: 
+            <label><strong>Situação:</strong> 
                 <?php 
                 if($linha['situacao'] == 0) {
-                    echo '<span class="badge rounded-pill bg-primary text-dark">Agendado</span>';
+                    echo '<span class="badge rounded-pill bg-primary">Agendado</span>';
                 } elseif($linha['situacao'] == 1) {
-                    echo "<span class='badge rounded-pill bg-success text-dark'>Concluído</span>";
+                    echo "<span class='badge rounded-pill bg-success'>Concluído</span>";
                 } elseif($linha['situacao'] == 3) {
-                    echo "<span class='badge rounded-pill bg-danger text-dark'>Cancelado</span>";
+                    echo "<span class='badge rounded-pill bg-danger'>Cancelado</span>";
                 }
                 ?>
             </label>
@@ -95,7 +103,7 @@ $resultado = mysqli_query($conn, $sql);
         <div class="col">
             <strong><label class="text-primary">Total: R$ <?php echo number_format($linha['valor'], 2, ',', '.')?></label></strong>
             <br>
-            <strong><label class="text-success" >Entrada: R$ <?php echo number_format($linha['entrada'], 2, ',', '.')?> (Pago)</label></strong>
+            <?php echo $mensagem?>
             <br>
             <strong><label class="text-danger">Restante: R$ <?php echo number_format($linha['restante'], 2, ',', '.')?></label></strong>
         </div>

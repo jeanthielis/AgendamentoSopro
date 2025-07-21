@@ -1,4 +1,7 @@
-   /**
+
+  
+  
+  /**
  * Mostra um alerta animado
  * @param {string} message - Mensagem a ser exibida
  * @param {string} type - Tipo de alerta ('success' ou 'error')
