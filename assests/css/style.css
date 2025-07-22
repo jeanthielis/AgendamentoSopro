@@ -124,6 +124,19 @@
             
             
         }
+
+           
+        .btn-add-despesa {
+            position: fixed;
+            bottom: 150px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            z-index: 999;
+            border-radius: 50%;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
       
   
 

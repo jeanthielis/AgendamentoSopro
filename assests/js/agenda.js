@@ -40,7 +40,8 @@ function downloadDivAsImage(divId, fileName) {
         })
         .catch(function(error) {
             console.error("Erro ao capturar a div:", error);
-            alert("Não foi possível gerar a imagem. Tente novamente ou use outro navegador.");
+            Swal.fire('Erro!', 'Algo deu errado tente eu outro navegador!', 'error');
+
         });
 }
 
@@ -77,7 +78,8 @@ function downloadDivAsImage(divId, fileName) {
                     
                 },
                 error: function() {
-                    showAlert('Erro ao carregar agendamentos.', 'danger');
+                    Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
                 }   
             })              
         });
@@ -95,7 +97,8 @@ function downloadDivAsImage(divId, fileName) {
                     
                 },
                 error: function() {
-                    showAlert('Erro ao carregar agendamentos.', 'danger');
+                    Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
                 }   
             })             
         });
@@ -111,7 +114,8 @@ function downloadDivAsImage(divId, fileName) {
                     $('#lista-agendamentos').html(response);
                 },
                 error: function() {
-                    showAlert('Erro ao buscar agendamentos.', 'danger');
+                    Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
                 }
             });
         });
@@ -124,6 +128,7 @@ function downloadDivAsImage(divId, fileName) {
             type: 'POST',
             success: function (response) {
                 $('#lista-agendamentos').html(response);
+                Swal.close();
             }
         });
     }
@@ -249,7 +254,8 @@ function downloadDivAsImage(divId, fileName) {
                 detalhesModal.show();
             },
             error: function() {
-                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+                Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
             }
         });
     });
@@ -257,7 +263,7 @@ function downloadDivAsImage(divId, fileName) {
                 
             
     // Função para abrir a tela de edição agendamento
-  $(document).on('click','.btnAtualizaModal','#btnEditar', function() {
+  $(document).on('click','.btnAtualizaModal', function() {
         var id = $("#id_agenda").val();
         var id = $(this).attr('id');
         $.ajax({
@@ -266,12 +272,14 @@ function downloadDivAsImage(divId, fileName) {
             data: { id: id, action: 0 }, // 0 para buscar detalhes
             success: function(response) {
                 $("#bodyAtualiza").html(response);
+                $("#lbl-comprovante").text("Gerar Comprovante");
                 atualizaModal.show();
                 detalhesModal.hide();
 
             },
             error: function() {
-                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+                Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
             }
         });
     });
@@ -283,13 +291,15 @@ function downloadDivAsImage(divId, fileName) {
             type: 'POST',           
             data: { id: id, action: 0 }, // 0 para buscar detalhes
             success: function(response) {
+                $("#lbl-comprovante").text("Gerar Comprovante");
                 $("#bodyAtualiza").html(response);
                 atualizaModal.show();
                 detalhesModal.hide();
 
             },
             error: function() {
-                showAlert('Erro ao carregar detalhes do agendamento.', 'danger');
+                Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
             }
         });
     });
@@ -342,12 +352,13 @@ function downloadDivAsImage(divId, fileName) {
                 $('#atualizarAgendamento').css('display', 'none');
                  detalhesModal.hide();   
                 renderizarAgendamentos();
-                showAlert('Agenda atualizada com sucesso!', 'success');
+                Swal.fire('Sucesso!', 'Operação concluída com sucesso!', 'success');
                 $('#modalTitleDetalhes').text('Detalhes do Agendamento');
                 $('#formDetalhes')[0].reset();
             },
             error: function() {
-                showAlert('Erro ao atualizar Agenda do agendamento.', 'danger');
+                Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
             }
         });
 
@@ -358,42 +369,68 @@ function downloadDivAsImage(divId, fileName) {
     // Função para cancelar agendamento
      $(document).on('click','.deletarAgenda', function() {
         var id = this.id;
-        if (confirm('Você tem certeza que deseja cancelar este agendamento?')) {
-            $.ajax({
-                url: 'banco/db_marcarConcluido.php',
-                type: 'POST',
-                data: { id: id , situacao: 3 }, // 3 para cancelado
-                success: function(response) {
-                        showAlert('Agendamento deletado com sucesso!', 'success');
+        
+            // Confirmação
+            Swal.fire({
+            title: 'Deseja cancelar o agendamento?',
+            text: "Você não poderá reverter isso!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, confirmar!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'banco/db_marcarConcluido.php',
+                    type: 'POST',
+                    data: { id: id , situacao: 3 }, // 3 para cancelado
+                    success: function(response) {
+                        Swal.fire('Sucesso!', 'Operação concluída com sucesso!', 'success');
                         renderizarAgendamentos();
-                   
-                },
-                error: function() {
-                    showAlert('Erro ao conectar com o servidor. Tente novamente.', 'danger');
-                }
-            });
-        }
+                    
+                    },
+                    error: function() {
+                        Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
+                    }
+                });               
+            }
+        });
+
     });
     //Marca agendamento como concluído
     $(document).on('click','.marcarConcluido', function() {
         var id = this.id;
-        
-        if (confirm('Você tem certeza que deseja marcar este agendamento como concluído?')) {
-            $.ajax({
-                url: 'banco/db_marcarConcluido.php',
-                type: 'POST',
-                data: { id: id, situacao: 1 },
-                success: function(response) {
-                    showAlert('Agendamento marcado como concluído!', 'success');
-                    renderizarAgendamentos();
-                },                                   
- 
-                error: function() {
-                    showAlert('Erro ao conectar com o servidor. Tente novamente.', 'danger');
+
+            // Confirmação
+            Swal.fire({
+            title: 'Deseja marcar como concluído?',
+            text: "Você não poderá reverter isso!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, confirmar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'banco/db_marcarConcluido.php',
+                        type: 'POST',
+                        data: { id: id, situacao: 1 },
+                        success: function(response) {
+                            renderizarAgendamentos();
+                            Swal.fire('Confirmado!','Sua ação foi executada.','success')
+                        },                                   
+    
+                        error: function() {
+                            Swal.fire('Erro!', 'Algo deu errado!', 'error');
+
+                        }
+                    });
                 }
-            });
-        }   
-    })                        
+        
+            }); })                        
 
     // Botão para salvar agendamento        
     $(document).on('click','#btnSalvarAgendamento',function(){
@@ -417,11 +454,12 @@ function downloadDivAsImage(divId, fileName) {
             beforeSend:function(){
                 $("#btnSalvarAgendamento").prop('disabled', true);
                 $("#btnSalvarAgendamento").text('Salvando...');
+
             },
             success:function(response){
                 agendaModal.hide();
                 $('#formAgendamento')[0].reset();
-                showAlert('Cadastro realizado com sucesso!', 'success');
+                Swal.fire('Sucesso!', 'Agendado com sucesso!', 'success');
                 $('#modalAgendamentoLabel').text('Novo Agendamento');
                 $("#btnSalvarAgendamento").prop('disabled', false);
                 $("#btnSalvarAgendamento").text('Salvar Agendamento');
@@ -431,7 +469,7 @@ function downloadDivAsImage(divId, fileName) {
 
             },
             error: function(result) {
-              alert("Erro ao salvar agendamento. Tente novamente.");
+               Swal.fire('Erro!', 'Algo deu errado!', 'error');
               $("#btnSalvarAgendamento").prop('disabled', false);
               $("#btnSalvarAgendamento").text('Salvar Agendamento');
           }

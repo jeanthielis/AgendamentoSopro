@@ -1,10 +1,72 @@
 <html>
-<br>
-     <div class="d-flex justify-content-between align-items-center cabecalho p-3">
-            <div>
-                <h1 class="card-title">Despesas</h1>
-            </div>
-                <i class="bi bi-wallet2"  style="font-size: 2rem;"></i>
+<body>
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col">
+             <button type="button" class="btn btn-danger btn-add-despesa" data-toggle="modal" id="teste">            <i class="bi bi-plus"></i>
+</button>
+    
+        </div>
     </div>
-    <hr>
+
+    <div  id="listar-despesa" class="row">
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <!-- Button trigger modal -->
+   
+    <!-- Modal -->
+    <div class="modal fade" id="modalDespesa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header bg-danger text-white">
+                   <h5 class="modal-title" id="exampleModalLabel">Despesas</h5>
+                   <button id='fecharDespesa' type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                   </button>
+               </div>
+               <div class="modal-body">
+                <form id="form-despesas">
+                    <input style="display: none;" value="salvar" id="action" name="action">
+                    <div class="row">
+                        <div class="col">
+                            <label for="descricao">Descrição</label><br>
+                            <input type="text" class="form-control" id="descricao" name="descricao">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <label for="motivo">Motivo do Gasto</label><br>
+                            <select class="form-control" id="motivo" name="motivo">
+                                <option >Empresa</option>
+                                <option >Pessoal</option>
+                                <option >Salário</option>
+                            </select>
+
+                        </div>
+                         <div class="col">
+                            <label for="valorDespesa">Valor</label><br>
+                            <input type="number" step="0.01" class="form-control"id="valorDespesa" name="valorDespesa">
+                        </div>
+                    </div>
+                </form>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" id='fecharDespesa'class="btn btn-secondary" data-dismiss="modal">Close</button>
+                   <button type="button" id="btn-despesa" class="btn btn-primary">Lançar Despesa</button>
+               </div>
+           </div>
+       </div>
+    </div>
+
+<script src="assests/js/despesas.js"></script>
+</body>    
+
 </html>

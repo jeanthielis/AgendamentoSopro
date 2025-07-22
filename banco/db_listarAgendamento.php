@@ -48,10 +48,10 @@ while($linha=mysqli_fetch_assoc($resultado)){
             
 ?>    
 <div class="col-md-6">
-        <div class="card <?php echo $status;?>">
+        <div class="card  <?php echo $status;?> " >
             <!-- Área do título sem card-header -->
             <div class="card-title-container">
-                <h5 class="card-title mb-0 btnDetalhesModal" id='<?php echo $linha['id_agenda']?>'  ><?php echo $linha['cliente']?></h5>
+                <h5 class="card-title mb-0"><?php echo $linha['cliente']?></h5>
                  <div class="dropdown">
                     <button class="three-dots-btn" type="button" id="cardOptions" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical fs-5"></i>
@@ -68,7 +68,7 @@ while($linha=mysqli_fetch_assoc($resultado)){
 
 
             
-            <div class="card-body pt-2 btnDetalhesModal" id='<?php echo $linha['id_agenda']?>'>
+            <div class="card-body pt-2 btnDetalhesModal " id='<?php echo $linha['id_agenda']?>'>
                 <p class='card-subtitle '><i class="bi bi-calendar"></i> <?php echo $semana[$linha['dia']].' - '.$linha['dataformatada'].' - '. $linha['horaformatada']?></p>
                 <p class="card-text">
                     <i class="bi bi-palette"></i> 
